@@ -1,0 +1,15 @@
+{
+  "extends": "./tsconfig.json",
+  // rootDir sabit: çıktı her zaman dist/*.js (dist/main.js, dist/bootstrap.js).
+  // Vercel girişi (api/index.js) bu deterministik yola (../dist/bootstrap) bağlı.
+  //
+  // tsBuildInfoFile dist'in İÇİNDE olmalı. nest-cli.json'da deleteOutDir: true —
+  // her build dist'i siler. tsbuildinfo dışarıda kalırsa tsc "değişiklik yok"
+  // deyip HİÇ emit etmez; nest build exit 0 verir ama dist BOŞ kalır ve
+  // serverless runtime'da "Cannot find module '../dist/bootstrap'" ile patlar.
+  "compilerOptions": {
+    "rootDir": "./src",
+    "tsBuildInfoFile": "./dist/tsconfig.build.tsbuildinfo"
+  },
+  "exclude": ["node_modules", "test", "scripts", "dist", "**/*spec.ts"]
+}

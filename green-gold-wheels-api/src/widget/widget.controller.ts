@@ -1,0 +1,46 @@
+import {
+  Body,
+  Controller,
+  Get,
+  Headers,
+  Post,
+  Query,
+  UseGuards,
+} from '@nestjs/common';
+import { ThrottlerGuard } from '@nestjs/throttler';
+import { CreateWidgetEventDto } from './dto/create-widget-event.dto';
+import { WidgetService } from './widget.service';
+import { WidgetKeyRateGuard } from '../common/widget-key-rate.guard';
+import { Public } from '../common/route-metadata';
+
+// /widget/* public yüzey: auth YOK (@Public). IP başına 60/dk (ThrottlerGuard)
+// + widget key başına 300/dk (WidgetKeyRateGuard). Origin kontrolü ayrıca
+// bootstrap'taki createWidgetCors middleware'inde (şirket bazlı allow-list).
+@Public()
+@UseGuards(ThrottlerGuard, WidgetKeyRateGuard)
+@Controller('widget')
+export class WidgetController {
+  constructor(private readonly widgetService: WidgetService) {}
+
+  // GET /widget/config?key=<public_widget_key> — public. Widget'ın gösterdiği
+  // config + araç sınıfları/faktörleri.
+  @Get('config')
+  async getConfig(@Query('key') key?: string) {
+    return this.widgetService.getConfig(key);
+  }
+
+  // GET /widget/impact?key=<public_widget_key> — public. Aylık toplu tahmini etki.
+  @Get('impact')
+  async getImpact(@Query('key') key?: string) {
+    return this.widgetService.getImpact(key);
+  }
+
+  // POST /widget/events — public. Header: X-Widget-Key: <public_widget_key>
+  @Post('events')
+  async createEvent(
+    @Headers('x-widget-key') widgetKey: string | undefined,
+    @Body() dto: CreateWidgetEventDto,
+  ) {
+    return this.widgetService.recordEvent(widgetKey, dto);
+  }
+}

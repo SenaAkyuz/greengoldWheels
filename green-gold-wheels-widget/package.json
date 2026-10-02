@@ -1,0 +1,25 @@
+{
+  "name": "green-gold-wheels-widget",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "description": "Green Gold Wheels — arac kiralama karbon katki widget'i (Shadow DOM web component)",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc -b && vite build",
+    "preview": "vite preview",
+    "test": "vitest run",
+    "test:watch": "vitest"
+  },
+  "dependencies": {
+    "preact": "^10.29.3"
+  },
+  "devDependencies": {
+    "@preact/preset-vite": "^2.10.5",
+    "@types/node": "^24.13.2",
+    "jsdom": "^29.1.1",
+    "typescript": "~5.9.0",
+    "vite": "^8.1.1",
+    "vitest": "^4.1.10"
+  }
+}

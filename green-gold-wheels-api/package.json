@@ -1,0 +1,97 @@
+{
+  "name": "green-gold-wheels-api",
+  "version": "0.0.1",
+  "description": "Green Gold Wheels — arac kiralama karbon katki API (NestJS + Neon Postgres + Neon Auth)",
+  "private": true,
+  "license": "UNLICENSED",
+  "scripts": {
+    "build": "nest build",
+    "vercel-build": "nest build",
+    "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\" \"scripts/**/*.ts\"",
+    "start": "nest start",
+    "start:dev": "nest start --watch",
+    "start:prod": "node dist/main",
+    "lint": "eslint \"{src,test,scripts}/**/*.ts\" --fix",
+    "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js",
+    "test:watch": "node --experimental-vm-modules node_modules/jest/bin/jest.js --watch",
+    "create-company": "ts-node -r tsconfig-paths/register scripts/create-company.ts",
+    "activate-company": "ts-node -r tsconfig-paths/register scripts/activate-company.ts",
+    "seed-vehicle-classes": "ts-node -r tsconfig-paths/register scripts/seed-vehicle-classes.ts",
+    "migrate": "ts-node -r tsconfig-paths/register scripts/migrate.ts",
+    "setup-app-role": "ts-node -r tsconfig-paths/register scripts/setup-app-role.ts",
+    "link-member": "ts-node -r tsconfig-paths/register scripts/link-member.ts",
+    "check-auth": "ts-node -r tsconfig-paths/register scripts/check-auth.ts",
+    "create-auth-user": "ts-node -r tsconfig-paths/register scripts/create-auth-user.ts",
+    "list-auth-users": "ts-node -r tsconfig-paths/register scripts/list-auth-users.ts",
+    "setup-demo": "ts-node -r tsconfig-paths/register scripts/setup-demo.ts"
+  },
+  "dependencies": {
+    "@nestjs/common": "^11.0.1",
+    "@nestjs/config": "^4.0.4",
+    "@nestjs/core": "^11.0.1",
+    "@nestjs/platform-express": "^11.0.1",
+    "@nestjs/throttler": "^6.5.0",
+    "@upstash/redis": "^1.38.0",
+    "class-transformer": "^0.5.1",
+    "class-validator": "^0.15.1",
+    "jose": "^6.2.12",
+    "pg": "^8.23.1",
+    "reflect-metadata": "^0.2.2",
+    "rxjs": "^7.8.1"
+  },
+  "devDependencies": {
+    "@electric-sql/pglite": "^0.5.8",
+    "@electric-sql/pglite-socket": "^0.2.11",
+    "@eslint/eslintrc": "^3.2.0",
+    "@eslint/js": "^9.18.0",
+    "@nestjs/cli": "^11.0.0",
+    "@nestjs/schematics": "^11.0.0",
+    "@nestjs/testing": "^11.0.1",
+    "@types/express": "^5.0.0",
+    "@types/jest": "^30.0.0",
+    "@types/node": "^24.0.0",
+    "@types/pg": "^8.23.1",
+    "@types/supertest": "^7.2.1",
+    "eslint": "^9.18.0",
+    "eslint-config-prettier": "^10.0.1",
+    "eslint-plugin-prettier": "^5.2.2",
+    "globals": "^17.0.0",
+    "jest": "^30.0.0",
+    "prettier": "^3.4.2",
+    "source-map-support": "^0.5.21",
+    "supertest": "^7.3.0",
+    "ts-jest": "^29.2.5",
+    "ts-node": "^10.9.2",
+    "tsconfig-paths": "^4.2.0",
+    "typescript": "^5.7.3",
+    "typescript-eslint": "^8.20.0"
+  },
+  "jest": {
+    "moduleFileExtensions": [
+      "js",
+      "json",
+      "ts"
+    ],
+    "rootDir": ".",
+    "roots": [
+      "<rootDir>/src",
+      "<rootDir>/test",
+      "<rootDir>/scripts"
+    ],
+    "testRegex": ".*\\.spec\\.ts$",
+    "testTimeout": 30000,
+    "transform": {
+      "^.+\\.(t|j)s$": [
+        "ts-jest",
+        {
+          "tsconfig": "tsconfig.json"
+        }
+      ]
+    },
+    "collectCoverageFrom": [
+      "src/**/*.(t|j)s"
+    ],
+    "coverageDirectory": "./coverage",
+    "testEnvironment": "node"
+  }
+}

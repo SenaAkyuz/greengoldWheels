@@ -1,0 +1,145 @@
+@import "tailwindcss";
+
+/* Panel bilinçli olarak açık tema — Green Gold Stay paneliyle aynı dil.
+   Dark auto-switch yok: rapor ekranları her cihazda aynı görünsün. */
+@theme inline {
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+:root {
+  --gg-forest: #064b3d;
+  --gg-forest-deep: #033d32;
+  --gg-forest-soft: #176b58;
+  --gg-lime: #c9eb47;
+  --gg-canvas: #f5f7f3;
+  --gg-paper: #ffffff;
+  --gg-line: #dce4dc;
+  /* WCAG AA: beyaz üzerinde 5.85:1, canvas üzerinde 5.42:1. */
+  --gg-muted: #5a6862;
+  --gg-display: Georgia, "Times New Roman", serif;
+}
+
+body {
+  font-family: var(--font-geist-sans), system-ui, Arial, sans-serif;
+  background: var(--gg-canvas);
+  color: #12251e;
+}
+
+::selection {
+  background: #dff39a;
+  color: #083f35;
+}
+
+.gg-page {
+  width: 100%;
+  max-width: 1480px;
+  margin-inline: auto;
+  padding: 34px 36px 56px;
+}
+
+.gg-page-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 18px;
+}
+
+.gg-kicker {
+  color: #2f7667;
+  font-size: 12px;
+  font-weight: 750;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+.gg-title {
+  margin-top: 7px;
+  color: #10251e;
+  font-family: var(--gg-display);
+  font-size: clamp(30px, 3vw, 42px);
+  font-weight: 500;
+  letter-spacing: -0.035em;
+  line-height: 1.05;
+}
+
+.gg-subtitle {
+  margin-top: 8px;
+  color: var(--gg-muted);
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.gg-card {
+  border: 1px solid var(--gg-line);
+  border-radius: 15px;
+  background: var(--gg-paper);
+  box-shadow: 0 16px 40px rgba(16, 49, 39, 0.045);
+}
+
+.gg-notice {
+  border: 1px solid #d2e5d6;
+  border-radius: 13px;
+  background: #edf6ee;
+  color: #174d3f;
+}
+
+.gg-input {
+  width: 100%;
+  border: 1px solid #d8e1da;
+  border-radius: 8px;
+  background: #fbfcfb;
+  padding: 9px 12px;
+  font-size: 14px;
+  color: #17372d;
+  outline: none;
+}
+.gg-input:focus {
+  border-color: #347866;
+  box-shadow: 0 0 0 3px rgba(92, 159, 128, 0.2);
+}
+.gg-input:disabled {
+  cursor: not-allowed;
+  background: #f1f4f1;
+  color: #6b7a73;
+}
+
+.gg-btn {
+  display: inline-flex;
+  min-height: 44px;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  background: #075442;
+  padding: 0 18px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #fff;
+  transition: background 0.15s;
+}
+.gg-btn:hover {
+  background: #043f34;
+}
+.gg-btn:disabled {
+  cursor: not-allowed;
+  background: #b7c4bd;
+}
+
+@media (max-width: 767px) {
+  .gg-page {
+    padding: 24px max(18px, env(safe-area-inset-left)) 40px
+      max(18px, env(safe-area-inset-right));
+  }
+
+  /* iOS Safari, font-size < 16px alana odaklanınca sayfayı zoom'lar. */
+  input,
+  select,
+  textarea {
+    font-size: 16px;
+  }
+}
+
+.gg-safe-top {
+  padding-top: env(safe-area-inset-top);
+}

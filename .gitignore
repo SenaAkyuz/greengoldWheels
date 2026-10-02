@@ -1,0 +1,25 @@
+# Bagimliliklar
+node_modules/
+
+# Build cikti
+dist/
+.next/
+out/
+*.tsbuildinfo
+
+# Ortam degiskenleri — GERCEK ANAHTARLAR ASLA COMMIT EDILMEZ
+.env
+.env.*
+!.env.example
+
+# Vercel / arac yerel durumu
+.vercel
+.turbo/
+
+# Test / coverage
+coverage/
+
+# Editor & OS
+.DS_Store
+Thumbs.db
+*.log
