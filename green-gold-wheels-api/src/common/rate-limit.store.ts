@@ -67,8 +67,19 @@ export class RateLimitStore {
     return this.redis !== null;
   }
 
+  /**
+   * Bu projenin Redis anahtar alanı.
+   *
+   * Aynı Upstash veritabanı başka bir Green Gold projesiyle (ör. Stay)
+   * paylaşılabilir; iki proje de aynı iç önekleri (`thr:`, `wk:`) kullandığı
+   * için proje adı olmadan AYNI IP + AYNI yol sayaçları birleşir ve limitler
+   * birbirine karışır. Bu önek o çakışmayı imkânsız kılar.
+   */
+  private static readonly NAMESPACE = 'ggw';
+
   /** key için pencerede bir vuruş kaydeder ve güncel sayacı döndürür. */
-  async hit(key: string, windowMs: number): Promise<RateHit> {
+  async hit(rawKey: string, windowMs: number): Promise<RateHit> {
+    const key = `${RateLimitStore.NAMESPACE}:${rawKey}`;
     if (this.redis) {
       const res = (await this.redis.eval(
         INCR_WINDOW_LUA,
@@ -95,8 +106,17 @@ export class RateLimitStore {
   }
 }
 
+let shared: RateLimitStore | null = null;
+
 /**
  * Uygulama genelinde tek örnek — throttler storage ve widget-key-rate guard
- * bunu paylaşır. Env import anında okunur (serverless soğuk başlangıçta hazır).
+ * bunu paylaşır.
+ *
+ * İLK KULLANIMDA kurulur, dosya içe aktarılırken DEĞİL: yerelde `.env`
+ * ConfigModule ile içe aktarmadan SONRA okunur; örnek erken kurulursa Upstash
+ * değişkenleri görünmez ve sayaç sessizce bellek içine düşerdi.
  */
-export const rateLimitStore = new RateLimitStore();
+export function getRateLimitStore(): RateLimitStore {
+  shared ??= new RateLimitStore();
+  return shared;
+}

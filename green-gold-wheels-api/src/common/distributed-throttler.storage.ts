@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import type { ThrottlerStorage } from '@nestjs/throttler';
-import { RateLimitStore, rateLimitStore } from './rate-limit.store';
+import { RateLimitStore, getRateLimitStore } from './rate-limit.store';
 
 // @nestjs/throttler root'tan export etmiyor; increment'in döndürmesi gereken kayıt.
 interface ThrottlerRecord {
@@ -20,7 +20,12 @@ interface ThrottlerRecord {
  */
 @Injectable()
 export class DistributedThrottlerStorage implements ThrottlerStorage {
-  constructor(private readonly store: RateLimitStore = rateLimitStore) {}
+  // Paylaşılan örnek İLK KULLANIMDA çözülür (bkz. getRateLimitStore).
+  constructor(private readonly injected?: RateLimitStore) {}
+
+  private get store(): RateLimitStore {
+    return this.injected ?? getRateLimitStore();
+  }
 
   async increment(
     key: string,

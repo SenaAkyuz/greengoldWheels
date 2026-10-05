@@ -1,4 +1,4 @@
-import { redirect } from 'next/navigation';
+import Link from 'next/link';
 import { getSessionUser } from '@/lib/api';
 import { LoginForm } from './LoginForm';
 
@@ -11,9 +11,16 @@ export default async function LoginPage({
 }: {
   searchParams: Promise<{ demo?: string }>;
 }) {
-  // Zaten girişliyse panele al.
+  /**
+   * Giriş ekranı HER ZAMAN açılır — açık bir oturum varken bile.
+   *
+   * Önceden burada panele yönlendirme vardı; ama bu sayfaya çoğunlukla
+   * tanıtım sitesindeki "Sisteme giriş" butonundan geliniyor ve o butona
+   * basan kişi giriş ekranını görmeyi bekliyor. Oturumu açık olan kişi
+   * aşağıdaki satırdan tek tıkla panele geçebilir (ya da başka bir hesapla
+   * giriş yapabilir).
+   */
   const user = await getSessionUser();
-  if (user) redirect('/');
 
   // Demo butonu görünürlüğü SUNUCUDA hesaplanır; istemciye yalnızca bayrak
   // gider — kimlik bilgisi asla.
@@ -75,6 +82,15 @@ export default async function LoginPage({
             <p className="mb-7 mt-2 text-sm text-[#5a6862]">
               Şirket panelinize erişmek için giriş yapın.
             </p>
+
+            {user && (
+              <div className="mb-4 flex flex-wrap items-center justify-between gap-2 rounded-lg border border-[#d2e5d6] bg-[#edf6ee] px-3 py-2 text-sm text-[#174d3f]">
+                <span>Bu tarayıcıda açık bir oturum var.</span>
+                <Link href="/" className="font-semibold text-[#0b5c49] underline">
+                  Panele git →
+                </Link>
+              </div>
+            )}
 
             {demoRejected && (
               <div role="alert" className="mb-4 rounded-lg border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-700">

@@ -6,7 +6,7 @@ import {
 } from '@nestjs/common';
 import { ThrottlerException } from '@nestjs/throttler';
 import { Request } from 'express';
-import { RateLimitStore, rateLimitStore } from './rate-limit.store';
+import { RateLimitStore, getRateLimitStore } from './rate-limit.store';
 
 /**
  * Widget key başına ek hız sınırı (IP başına sınırın üstüne, spam/şişirme
@@ -18,13 +18,17 @@ export class WidgetKeyRateGuard implements CanActivate {
   private readonly LIMIT = 300;
   private readonly WINDOW_MS = 60_000;
 
-  private readonly store: RateLimitStore;
+  private readonly injected?: RateLimitStore;
 
   // @Optional(): RateLimitStore bir DI provider'ı değil (uygulama geneli
   // singleton). Nest guard'ı DI ile örneklerken store'u çözemez -> undefined
   // gelir, singleton'a düşülür. Testler fake store'u constructor'dan geçebilir.
   constructor(@Optional() store?: RateLimitStore) {
-    this.store = store ?? rateLimitStore;
+    this.injected = store;
+  }
+
+  private get store(): RateLimitStore {
+    return this.injected ?? getRateLimitStore();
   }
 
   async canActivate(context: ExecutionContext): Promise<boolean> {

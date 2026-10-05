@@ -9,12 +9,26 @@ Her yeni değişiklikte güncellenir. Tamamlananlar `[x]`.
 - [x] `npm run setup-demo` + `NEXT_PUBLIC_DEMO_WIDGET_KEY` panele yazıldı
 - [x] Proje GitHub'a aktarıldı: https://github.com/SenaAkyuz/greengoldWheels (`main`)
 
+- [x] Neon Console → Auth → "Sign-up with Email" kapatıldı
+- [x] Upstash değerleri API `.env` dosyasına yazıldı
+
+## 🔔 PROJE BİTİNCE HATIRLATILACAKLAR (Sena: "en son hatırlat")
+
+Claude bu iki maddeyi, proje bitti/canlıya alınacak dendiğinde **kendiliğinden** hatırlatır:
+
+- [ ] **Upstash değerlerini Vercel'e ekle:** `UPSTASH_REDIS_REST_URL` ve
+      `UPSTASH_REDIS_REST_TOKEN` → Wheels API projesine **ve** Stay'in kendi
+      Vercel projesine (Stay'e Claude dokunmaz; kodunda destek hazır).
+- [ ] **Tanıtım sitesi bağlantıları:** `greengold-wheels-mvp/index.html` içinde iki
+      `http://localhost:3001/...` bağlantısı (üstteki "Sisteme giriş" → `/login`,
+      alttaki "Canlı widget demosunu aç" → `/demo`) panelin canlı adresiyle
+      değiştirilecek. Panel adresi belli olunca Claude değiştirip push eder.
+
 ## Şimdi (lokal test sırasında)
 
-- [ ] Neon Console → Auth → **"Sign-up with Email"i tekrar KAPATIN**
-      (demo hesabı açıldı; yeni hesaplar yalnızca operatör betiğiyle açılır).
 - [ ] Paneli demo hesabıyla gezip ekranları kontrol edin (giriş ekranındaki
       "Demo panelini görüntüle").
+- [ ] Yerelde Upstash bağlantısı doğrulandı mı (logda "dağıtık (Upstash Redis) aktif")
 
 ---
 
@@ -28,10 +42,31 @@ Panelin adresi API'ye, API'nin adresi panele gerektiği için ikisi birbirini be
 Vercel aynı anda birden çok sunucu örneği çalıştırır; paylaşımlı sayaç olmazsa
 widget hız sınırı her örnekte ayrı sayılır.
 
-1. https://upstash.com → ücretsiz hesap → **Create Database** (Redis).
-2. Bölge olarak Neon projenize yakın olanı seçin (eu-west / eu-central).
-3. Veritabanı sayfasında **REST API** bölümünden iki değeri kopyalayın:
-   `UPSTASH_REDIS_REST_URL` ve `UPSTASH_REDIS_REST_TOKEN`.
+Hesabınızda **tek** Redis veritabanı var: `greengold-rate-limit` (Free Tier,
+Frankfurt, 500 bin komut/ay). 5 Ekim itibarıyla 105 komut kullanılmış; hareket
+yalnızca perşembe (~78) ve cuma (~27) günleri olmuş. Cuma günü Wheels'in API'si
+bellek içi modda çalışıyordu, yani cumadaki komutlar Wheels'ten değil. Perşembenin
+kaynağı bilinmiyor (Stay denemesi ya da konsolun kendi komutları olabilir).
+
+**Karar: bu tek veritabanını Stay ve Wheels birlikte kullanır.**
+Anahtarlar çakışmaz (Stay `thr:`/`iw:`, Wheels `ggw:thr:`/`ggw:wk:` yazar).
+Ücretsiz limit ortaktır; her widget isteği ~2 komut tüketir. Trafik büyürse
+Wheels için ayrı veritabanı açıp iki değeri değiştirmeniz yeter, koda dokunulmaz.
+
+> ℹ️ Sayaç anahtarları 60 saniye sonra kendiliğinden silinir. Data Browser'ın
+> boş görünmesi "kimse kullanmıyor" demek değildir. Gerçek kullanımı konsolun
+> **Usage** sekmesindeki komut grafiği gösterir.
+
+Yapılacaklar:
+- [ ] Upstash → `greengold-rate-limit` → **Details** → "REST API" bölümünden
+      `UPSTASH_REDIS_REST_URL` ve `UPSTASH_REDIS_REST_TOKEN` değerlerini kopyalayın.
+- [ ] Yerel test için bunları **API'nin `.env` dosyasına** yazın (şu an ikisi de
+      BOŞ; boşken API bellek içi modda çalışır ve açılışta uyarı basar).
+- [ ] Yazdıktan sonra API'yi yeniden başlatıp bir widget isteği atın; logda
+      "dağıtık (Upstash Redis) aktif" görmelisiniz, Usage grafiğinde yeni komutlar.
+- [ ] Canlıda aynı iki değeri Vercel'de API projesine ekleyin (Adım 1).
+- [ ] Stay'in canlı Vercel projesine de aynı iki değeri siz ekleyin (Stay'e ben dokunmuyorum;
+      koduna zaten destek var).
 
 ## Adım 1 · API'yi Vercel'e alın
 
