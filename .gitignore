@@ -23,3 +23,6 @@ coverage/
 .DS_Store
 Thumbs.db
 *.log
+
+# Kisisel yapilacaklar listesi — yalnizca yerelde tutulur, GitHub a GITMEZ
+YAPILACAKLAR.md
