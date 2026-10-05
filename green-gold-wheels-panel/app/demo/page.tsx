@@ -36,7 +36,12 @@ async function loadDemoVehicles(key: string): Promise<PreviewVehicle[]> {
 }
 
 export default async function DemoPage() {
-  const demoKey = process.env.NEXT_PUBLIC_DEMO_WIDGET_KEY;
+  // Bu sayfa sunucuda çizilir (force-dynamic), anahtar prop olarak istemciye
+  // geçer; bu yüzden NEXT_PUBLIC_ önekine gerek yok. Vercel, adında KEY geçen
+  // NEXT_PUBLIC_ değişkenleri eklerken uyarı verdiği için sade ad (DEMO_WIDGET_KEY)
+  // öncelikli; eski ad geriye uyumluluk için duruyor.
+  const demoKey =
+    process.env.DEMO_WIDGET_KEY || process.env.NEXT_PUBLIC_DEMO_WIDGET_KEY;
   const vehicles = demoKey ? await loadDemoVehicles(demoKey) : [];
 
   return (
