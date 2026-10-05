@@ -23,8 +23,20 @@ function required(name: string): string {
   return value;
 }
 
+/**
+ * Sondaki `/` ve boşluklar temizlenir.
+ *
+ * Neon Auth, `…/neondb/auth/` (sonda eğik çizgi) adresine istek gittiğinde
+ * her yola BOŞ GÖVDELİ 404 döndürür; panel oturum açamaz ve hata mesajı da
+ * yoktur (canlıda yaşandı). Adresi Vercel'e yapıştırırken sonda `/`
+ * kalması çok kolay bir hatadır; API tarafı da aynı temizliği yapar.
+ */
+function normalizeBaseUrl(raw: string): string {
+  return raw.trim().replace(/\/+$/, '');
+}
+
 export const auth = createNeonAuth({
-  baseUrl: required('NEON_AUTH_BASE_URL'),
+  baseUrl: normalizeBaseUrl(required('NEON_AUTH_BASE_URL')),
   cookies: {
     secret: required('NEON_AUTH_COOKIE_SECRET'),
   },
